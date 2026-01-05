@@ -32,7 +32,6 @@ const edoToEnglish: Record<string, string> = {
   "ọlọi": "wife",
   "ẹrhan": "father",
   "iye": "mother",
-  "ọmọ": "child",
   "ọghe": "chair",
   "ọkuta": "stone",
   "ọvẹn": "sun",
@@ -57,15 +56,15 @@ const edoToEnglish: Record<string, string> = {
   "khin": "very/much",
   
   // Numbers
-  "ọkpa": "one",
+  "ọkpa-num": "one",
   "evba": "two",
   "eha": "three",
   "ene": "four",
   "ise": "five",
-  "eha": "six",
-  "ihiọn": "seven",
+  "ẹha": "six",
+  "ihiọn-seven": "seven",
   "ẹẹ": "eight",
-  "ihiọn": "nine",
+  "ihiọn-nine": "nine",
   "igbe": "ten",
   
   // Phrases
@@ -364,6 +363,7 @@ export default function EdoTranslator() {
     </div>
   );
 }
+
 
 
 
