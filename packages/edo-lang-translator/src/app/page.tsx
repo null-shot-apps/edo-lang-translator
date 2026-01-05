@@ -76,7 +76,6 @@ const edoToEnglish: Record<string, string> = {
   "ọ gbọ": "i hear/understand",
   "gha ye": "i will go",
   "gha rre": "i will do",
-  "vbọọ khin": "thank you very much",
   "ẹse o": "please",
 };
 
