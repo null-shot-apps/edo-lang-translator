@@ -2,22 +2,122 @@
 
 import { useState } from 'react';
 
+// Edo-English dictionary
+const edoToEnglish: Record<string, string> = {
+  // Greetings
+  "ọbọ": "hello",
+  "ọbọ khare": "good morning",
+  "ọbọ ẹvbo": "good afternoon",
+  "ọbọ ọta": "good evening",
+  "vbọọ": "thank you",
+  "vbọọ khin": "thank you very much",
+  "ẹse": "please",
+  "ọmọ": "child",
+  "ọba": "king",
+  "ọvbi": "child/children",
+  
+  // Common words
+  "ẹdọ": "edo",
+  "ọkhian": "language",
+  "ọvbokhan": "man",
+  "ọkpia": "woman",
+  "ọghẹ": "money",
+  "ẹhan": "food",
+  "amen": "water",
+  "ọwa": "house",
+  "ọkpa": "bag",
+  "ukpo": "cup",
+  "ebe": "book",
+  "ọkọ": "husband",
+  "ọlọi": "wife",
+  "ẹrhan": "father",
+  "iye": "mother",
+  "ọmọ": "child",
+  "ọghe": "chair",
+  "ọkuta": "stone",
+  "ọvẹn": "sun",
+  "ọsọn": "moon",
+  "ẹdo": "edo people",
+  "benin": "benin",
+  "nigeria": "nigeria",
+  
+  // Verbs
+  "gha": "will/shall",
+  "rre": "do/make",
+  "khian": "speak/say",
+  "ye": "go",
+  "gbe": "take",
+  "mọ": "know",
+  "gbọ": "hear/feel",
+  "hia": "see",
+  "dia": "buy",
+  "ta": "sell",
+  "je": "eat",
+  "mu": "drink",
+  "khin": "very/much",
+  
+  // Numbers
+  "ọkpa": "one",
+  "evba": "two",
+  "eha": "three",
+  "ene": "four",
+  "ise": "five",
+  "eha": "six",
+  "ihiọn": "seven",
+  "ẹẹ": "eight",
+  "ihiọn": "nine",
+  "igbe": "ten",
+  
+  // Phrases
+  "ọbọ, ọ dọ?": "hello, how are you?",
+  "i dọ?": "how are you?",
+  "ọ dọ gbọn": "i am fine",
+  "ọ dọ": "it is good",
+  "ọ mọ": "i know",
+  "ọ gbọ": "i hear/understand",
+  "gha ye": "i will go",
+  "gha rre": "i will do",
+  "vbọọ khin": "thank you very much",
+  "ẹse o": "please",
+};
+
+// English to Edo dictionary (reverse mapping)
+const englishToEdo: Record<string, string> = {};
+Object.entries(edoToEnglish).forEach(([edo, english]) => {
+  englishToEdo[english.toLowerCase()] = edo;
+});
+
 // Sample data for proverbs, eulogies, and traditional sayings
 const traditionalContent = {
   proverbs: [
-    { edo: "Ọghọ́ rre ọ́ rre ọ́ gbọ́ ọ́ gbọ́", english: "What goes around comes around", category: "proverb" },
-    { edo: "Ọmọ́ rre ọ́ mọ́ ọ́ gbọ́ ọ́ gbọ́", english: "A child who does not listen will feel", category: "proverb" },
-    { edo: "Ẹ̀dọ́ rre ọ́ rre ọ́ gbọ́ ọ́ gbọ́", english: "The Edo person who does not know will learn", category: "proverb" },
+    { edo: "Ọghẹ i gbe ọ gbe ọ khin", english: "Money that is not well managed will finish", category: "proverb" },
+    { edo: "Ọmọ i gbọ ọ gha mọ", english: "A child who does not listen will learn the hard way", category: "proverb" },
+    { edo: "Ẹdọ i mọ ọ gha mọ", english: "An Edo person who does not know will learn", category: "proverb" },
+    { edo: "Ọvbi ẹdo i rre ọ gha hia", english: "What an Edo child does not do, they will see", category: "proverb" },
+    { edo: "Amen i mu ọ gha khu", english: "Water that is not drunk will dry up", category: "proverb" },
   ],
   eulogies: [
     { edo: "Ọba ghator kpere, isẹ!", english: "Long live the King!", category: "eulogy" },
-    { edo: "Ọmọ́ Ọ̀vbíọ́khua", english: "Child of nobility", category: "eulogy" },
+    { edo: "Ọmọ Ọvbiọkhua", english: "Child of nobility", category: "eulogy" },
+    { edo: "Ọba n'ẹdo", english: "The King of Benin", category: "eulogy" },
+    { edo: "Ọmọ ọvbi ẹdo", english: "True child of Edo", category: "eulogy" },
   ],
   sayings: [
-    { edo: "Ọ̀vbíọ́khua", english: "Royal family/nobility", category: "saying" },
-    { edo: "Ẹ̀dọ́ ọ́ khian", english: "Edo language", category: "saying" },
+    { edo: "Ọvbiọkhua", english: "Royal family/nobility", category: "saying" },
+    { edo: "Ẹdọ ọ khian", english: "Edo language", category: "saying" },
+    { edo: "Ọba ẹdo", english: "King of Edo", category: "saying" },
+    { edo: "Ẹdo bọ khare", english: "Edo greets you", category: "saying" },
+    { edo: "Ọvbi ẹdo", english: "Child of Edo", category: "saying" },
   ]
 };
+
+interface TranslationHistory {
+  id: number;
+  input: string;
+  output: string;
+  direction: string;
+  timestamp: Date;
+}
 
 export default function EdoTranslator() {
   const [inputText, setInputText] = useState('');
@@ -25,11 +125,44 @@ export default function EdoTranslator() {
   const [isEnglishToEdo, setIsEnglishToEdo] = useState(true);
   const [activeTab, setActiveTab] = useState<'translator' | 'traditional'>('translator');
   const [selectedCategory, setSelectedCategory] = useState<'proverbs' | 'eulogies' | 'sayings'>('proverbs');
+  const [history, setHistory] = useState<TranslationHistory[]>([]);
+
+  const translateText = (text: string, toEdo: boolean): string => {
+    if (!text.trim()) return '';
+    
+    const dictionary = toEdo ? englishToEdo : edoToEnglish;
+    const lowerText = text.toLowerCase().trim();
+    
+    // Check for exact phrase match first
+    if (dictionary[lowerText]) {
+      return dictionary[lowerText];
+    }
+    
+    // Try word-by-word translation
+    const words = lowerText.split(/\s+/);
+    const translatedWords = words.map(word => {
+      // Remove punctuation for lookup
+      const cleanWord = word.replace(/[.,!?;:]/g, '');
+      return dictionary[cleanWord] || word;
+    });
+    
+    return translatedWords.join(' ');
+  };
 
   const handleTranslate = () => {
-    // Placeholder translation logic - in production, this would call an API
     if (inputText.trim()) {
-      setOutputText(`[Translation of: ${inputText}]`);
+      const translated = translateText(inputText, isEnglishToEdo);
+      setOutputText(translated);
+      
+      // Add to history
+      const newEntry: TranslationHistory = {
+        id: Date.now(),
+        input: inputText,
+        output: translated,
+        direction: isEnglishToEdo ? 'English → Ẹ̀dọ́' : 'Ẹ̀dọ́ → English',
+        timestamp: new Date(),
+      };
+      setHistory([newEntry, ...history].slice(0, 10)); // Keep last 10 translations
     }
   };
 
@@ -37,6 +170,10 @@ export default function EdoTranslator() {
     setIsEnglishToEdo(!isEnglishToEdo);
     setInputText(outputText);
     setOutputText(inputText);
+  };
+
+  const clearHistory = () => {
+    setHistory([]);
   };
 
   return (
@@ -103,6 +240,12 @@ export default function EdoTranslator() {
                 <textarea
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleTranslate();
+                    }
+                  }}
                   placeholder={isEnglishToEdo ? 'Type in English...' : 'Type in Ẹ̀dọ́...'}
                   className="w-full h-48 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none text-gray-900"
                 />
@@ -124,6 +267,43 @@ export default function EdoTranslator() {
                 </div>
               </div>
             </div>
+
+            {/* Translation History */}
+            {history.length > 0 && (
+              <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-bold text-gray-900">Translation History</h2>
+                  <button
+                    onClick={clearHistory}
+                    className="text-sm text-red-600 hover:text-red-700 font-medium"
+                  >
+                    Clear History
+                  </button>
+                </div>
+                <div className="space-y-3">
+                  {history.map((item) => (
+                    <div key={item.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="text-xs font-medium text-green-600">{item.direction}</span>
+                        <span className="text-xs text-gray-500">
+                          {item.timestamp.toLocaleTimeString()}
+                        </span>
+                      </div>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-sm text-gray-600 mb-1">Input:</p>
+                          <p className="text-gray-900">{item.input}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600 mb-1">Output:</p>
+                          <p className="text-gray-900 font-medium">{item.output}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <div className="space-y-6">
@@ -184,4 +364,7 @@ export default function EdoTranslator() {
     </div>
   );
 }
+
+
+
 
