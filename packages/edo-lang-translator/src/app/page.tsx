@@ -2,87 +2,94 @@
 
 import { useState } from 'react';
 
-// Edo-English dictionary
-const edoToEnglish: Record<string, string> = {
+// English to Edo dictionary
+const englishToEdo: Record<string, string> = {
   // Greetings
-  "ọbọ": "hello",
-  "ọbọ khare": "good morning",
-  "ọbọ ẹvbo": "good afternoon",
-  "ọbọ ọta": "good evening",
-  "vbọọ": "thank you",
-  "vbọọ khin": "thank you very much",
-  "ẹse": "please",
-  "ọmọ": "child",
-  "ọba": "king",
-  "ọvbi": "child/children",
+  "hello": "ọbọ",
+  "good morning": "ọbọ khare",
+  "good afternoon": "ọbọ ẹvbo",
+  "good evening": "ọbọ ọta",
+  "thank you": "vbọọ",
+  "thank you very much": "vbọọ khin",
+  "please": "ẹse",
+  "child": "ọmọ",
+  "king": "ọba",
+  "children": "ọvbi",
   
   // Common words
-  "ẹdọ": "edo",
-  "ọkhian": "language",
-  "ọvbokhan": "man",
-  "ọkpia": "woman",
-  "ọghẹ": "money",
-  "ẹhan": "food",
-  "amen": "water",
-  "ọwa": "house",
-  "ọkpa": "bag",
-  "ukpo": "cup",
-  "ebe": "book",
-  "ọkọ": "husband",
-  "ọlọi": "wife",
-  "ẹrhan": "father",
-  "iye": "mother",
-  "ọghe": "chair",
-  "ọkuta": "stone",
-  "ọvẹn": "sun",
-  "ọsọn": "moon",
-  "ẹdo": "edo people",
+  "edo": "ẹdọ",
+  "language": "ọkhian",
+  "man": "ọvbokhan",
+  "woman": "ọkpia",
+  "money": "ọghẹ",
+  "food": "ẹhan",
+  "water": "amen",
+  "house": "ọwa",
+  "bag": "ọkpa",
+  "cup": "ukpo",
+  "book": "ebe",
+  "husband": "ọkọ",
+  "wife": "ọlọi",
+  "father": "ẹrhan",
+  "mother": "iye",
+  "chair": "ọghe",
+  "stone": "ọkuta",
+  "sun": "ọvẹn",
+  "moon": "ọsọn",
+  "edo people": "ẹdo",
   "benin": "benin",
   "nigeria": "nigeria",
   
   // Verbs
-  "gha": "will/shall",
-  "rre": "do/make",
-  "khian": "speak/say",
-  "ye": "go",
-  "gbe": "take",
-  "mọ": "know",
-  "gbọ": "hear/feel",
-  "hia": "see",
-  "dia": "buy",
-  "ta": "sell",
-  "je": "eat",
-  "mu": "drink",
-  "khin": "very/much",
+  "will": "gha",
+  "shall": "gha",
+  "do": "rre",
+  "make": "rre",
+  "speak": "khian",
+  "say": "khian",
+  "go": "ye",
+  "take": "gbe",
+  "know": "mọ",
+  "hear": "gbọ",
+  "feel": "gbọ",
+  "understand": "gbọ",
+  "see": "hia",
+  "buy": "dia",
+  "sell": "ta",
+  "eat": "je",
+  "drink": "mu",
+  "very": "khin",
+  "much": "khin",
   
   // Numbers
-  "ọkpa-num": "one",
-  "evba": "two",
-  "eha": "three",
-  "ene": "four",
-  "ise": "five",
-  "ẹha": "six",
-  "ihiọn-seven": "seven",
-  "ẹẹ": "eight",
-  "ihiọn-nine": "nine",
-  "igbe": "ten",
+  "one": "ọkpa",
+  "two": "evba",
+  "three": "eha",
+  "four": "ene",
+  "five": "ise",
+  "six": "ẹha",
+  "seven": "ihiọn",
+  "eight": "ẹẹ",
+  "nine": "ihiọn",
+  "ten": "igbe",
   
   // Phrases
-  "ọbọ, ọ dọ?": "hello, how are you?",
-  "i dọ?": "how are you?",
-  "ọ dọ gbọn": "i am fine",
-  "ọ dọ": "it is good",
-  "ọ mọ": "i know",
-  "ọ gbọ": "i hear/understand",
-  "gha ye": "i will go",
-  "gha rre": "i will do",
-  "ẹse o": "please",
+  "hello, how are you?": "ọbọ, ọ dọ?",
+  "how are you?": "i dọ?",
+  "how are you": "i dọ?",
+  "i am fine": "ọ dọ gbọn",
+  "it is good": "ọ dọ",
+  "i know": "ọ mọ",
+  "i hear": "ọ gbọ",
+  "i understand": "ọ gbọ",
+  "i will go": "gha ye",
+  "i will do": "gha rre",
 };
 
-// English to Edo dictionary (reverse mapping)
-const englishToEdo: Record<string, string> = {};
-Object.entries(edoToEnglish).forEach(([edo, english]) => {
-  englishToEdo[english.toLowerCase()] = edo;
+// Edo to English dictionary (reverse mapping)
+const edoToEnglish: Record<string, string> = {};
+Object.entries(englishToEdo).forEach(([english, edo]) => {
+  edoToEnglish[edo.toLowerCase()] = english;
 });
 
 // Sample data for proverbs, eulogies, and traditional sayings
@@ -362,6 +369,7 @@ export default function EdoTranslator() {
     </div>
   );
 }
+
 
 
 
